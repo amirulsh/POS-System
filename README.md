@@ -7,9 +7,9 @@ If in linux, just clone and compile it.
 ```sh
 git clone https://github.com/amirulsh/POS-System
 cd POS-System
-javac -d out src/components/*.java src/POS.java
+javac -d out src/**/*.java
 ```
 Run it with the main in src/POS
 ```sh
-java out/POS
+java -cp out POS
 ```
