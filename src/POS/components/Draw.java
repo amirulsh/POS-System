@@ -48,7 +48,8 @@ public class Draw
         2,
         borderColor,
         backgroundColor,
-        "\u001B[49m"
+        "\u001B[49m",
+        width
         );
 
     firstPanel = box.ConstructBox(
@@ -57,7 +58,8 @@ public class Draw
         2,
         borderColor,
         panelColor,
-        backgroundColor
+        backgroundColor,
+        width
         );
 
     secondPanel = box.ConstructBox(
@@ -66,7 +68,8 @@ public class Draw
         2,
         borderColor,
         panelColor,
-        backgroundColor
+        backgroundColor,
+        width
         );
 
     thirdPanel = box.ConstructBox(
@@ -75,7 +78,8 @@ public class Draw
         2,
         borderColor,
         panelColor,
-        backgroundColor
+        backgroundColor,
+        width
         );
 
     fullBackground = "\u001B[2J\u001B[H"

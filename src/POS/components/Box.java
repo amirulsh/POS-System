@@ -2,51 +2,54 @@ package components;
 
 public class Box
 {
-  private String[] boxBorderHorizon = {"\u2500", "\u2501", "\u2550"};
-  private String[] boxBorderVertical = {"\u2502", "\u2503", "\u2551"};
-  private String[] boxBorderTopLeftCorner = {"\u250C", "\u250F", "\u2554"};
-  private String[] boxBorderTopRightCorner = {"\u2510", "\u2513", "\u2557"};
-  private String[] boxBorderBottomLeftCorner = {"\u2514", "\u2517", "\u255A"};
-  private String[] boxBorderBottomRightCorner = {"\u2519", "\u251B", "\u255D"};
+  AsciiCode ac = new AsciiCode();
 
-  public String ConstructBox(int width, int height, int borderType, String borderColor, String fillColor, String backgroundColor)
+  public String ConstructBox(int width, int height, int borderType, String borderColor, String fillColor, String backgroundColor, int backgroundWidth)
   {
-    String horizonLine = "";
-    String fill = "";
     String middlePart;
     String boxConstruct;
+    String horizonLine = "";
+    String fill = "";
+    String backgroundBorderReset = ac.MoveCursor(0, 1) + ac.ResetColor(true, true);
+    String backgroundBorder = ac.CursorToColumn(backgroundWidth) + ac.ResetColor(true, true) + backgroundBorderReset;
+    String moveBelow = ac.MoveCursor(-width, 1);
+
 
     for (int i = 0; i < width - 2; i++)
     {
-      horizonLine+=boxBorderHorizon[borderType];
+      horizonLine+=ac.boxBorderHorizon[borderType];
       fill+=" ";
     }
 
-    middlePart = "\u001B["+width+"D\u001B[1B" 
+
+    middlePart = moveBelow 
       + fillColor + borderColor
-      + boxBorderVertical[borderType]
+      + ac.boxBorderVertical[borderType]
       + fill 
-      + boxBorderVertical[borderType] 
+      + ac.boxBorderVertical[borderType] 
       + backgroundColor;
 
-    boxConstruct = fillColor + borderColor
-      + boxBorderTopLeftCorner[borderType] 
+    boxConstruct = ac.saveCursor
+      + fillColor + borderColor
+      + ac.boxBorderTopLeftCorner[borderType] 
       + horizonLine
-      + boxBorderTopRightCorner[borderType]
+      + ac.boxBorderTopRightCorner[borderType]
       + backgroundColor;
 
     for (int i = 0; i < height - 2; i++)
     {
       boxConstruct+=middlePart;
+      backgroundBorder+= backgroundBorderReset;
     }
 
-    boxConstruct+= "\u001B["+width+"D\u001B[1B" 
+    boxConstruct+= moveBelow
       + fillColor + borderColor
-      + boxBorderBottomLeftCorner[borderType] 
+      + ac.boxBorderBottomLeftCorner[borderType] 
       + horizonLine
-      + boxBorderBottomRightCorner[borderType] 
+      + ac.boxBorderBottomRightCorner[borderType] 
       + backgroundColor
-      + "\u001B["+width+"D" + "\u001B["+(height-1)+"A";
+      + backgroundBorder
+      + ac.loadCursor;
 
     return boxConstruct;
   }
