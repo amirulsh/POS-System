@@ -9,7 +9,7 @@ git clone https://github.com/amirulsh/POS-System
 cd POS-System
 javac -d out src/**/*.java
 ```
-Run it with the main in src/POS
+Run the compiled code.
 ```sh
 java -cp out POS
 ```
