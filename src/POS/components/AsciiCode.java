@@ -56,11 +56,11 @@ public class AsciiCode
     String rgb = r + ";" + g + ";" + b + "m";
     if (background) 
     {
-      return escapeCode + "48;2" + rgb;
+      return escapeCode + "48;2;" + rgb;
     }
     else 
     {
-      return escapeCode + "38;2" + rgb;
+      return escapeCode + "38;2;" + rgb;
     }
   }
 

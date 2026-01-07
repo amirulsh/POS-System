@@ -3,45 +3,42 @@ package components;
 public class Draw
 {
   Box box = new Box();
+  AsciiCode ac = new AsciiCode();
   
-  private String background;
+  public String background;
   private String fullBackground;
 
-  private String firstPanel;
+  public String firstPanel;
   private int firstPanelWidth;
   private int firstPanelHeight;
   private int firstPanelX = 2;
   private int firstPanelY = 2;
 
-  private String secondPanel;
+  public String secondPanel;
   private int secondPanelWidth;
   private int secondPanelHeight;
   private int secondPanelX;
   private int secondPanelY = 2;
 
-  private String thirdPanel;
+  public String thirdPanel;
   private int thirdPanelWidth;
   private int thirdPanelHeight;
   private int thirdPanelX = 2;
   private int thirdPanelY;
 
+  public String inputBox;
+  private int inputBoxWidth;
+  private int inputBoxHeight = 3;
+  private int inputBoxX;
+  private int inputBoxY;
+  private String inputBoxColor = ac.RgbColor(true, 255, 255, 255);
+
   private String panelColor =  "\u001B[48;5;110m";
   private String backgroundColor = "\u001B[48;5;15m";
   private String borderColor = "\u001B[38;5;17m";
 
-  public void PreConstruct(int width, int height)
+  private void CreateBoxes(int width, int height)
   {
-    firstPanelWidth = (width - 2) * 6 / 10;
-    firstPanelHeight = (height - 2) * 8 / 10;
-
-    secondPanelWidth = width - firstPanelWidth - 3;
-    secondPanelHeight = height - 2;
-    secondPanelX = firstPanelWidth + 3;
-
-    thirdPanelWidth = firstPanelWidth;
-    thirdPanelHeight = height - firstPanelHeight - 3;
-    thirdPanelY = firstPanelHeight + 3;
-
     background = box.ConstructBox(
         width,
         height,
@@ -82,14 +79,47 @@ public class Draw
         width
         );
 
-    fullBackground = "\u001B[2J\u001B[H"
+    inputBox = box.ConstructBox(
+        inputBoxWidth,
+        inputBoxHeight,
+        1,
+        borderColor,
+        inputBoxColor,
+        backgroundColor,
+        width
+        );
+    inputBox+= ac.MoveCursor(1, 1);
+  }
+
+  public void PreConstruct(int width, int height)
+  {
+    firstPanelWidth = width * 6 / 10 - 2;
+    firstPanelHeight = height * 8 / 10 - 2;
+
+    secondPanelWidth = width - firstPanelWidth - 3;
+    secondPanelHeight = height - 2;
+    secondPanelX = firstPanelWidth + 3;
+
+    thirdPanelWidth = firstPanelWidth;
+    thirdPanelHeight = height - firstPanelHeight - 3;
+    thirdPanelY = firstPanelHeight + 3;
+
+    inputBoxWidth = thirdPanelWidth * 6 / 10 - 2;
+    inputBoxX = thirdPanelX + 1;
+    inputBoxY = thirdPanelY + 1;
+
+    CreateBoxes(width, height);
+
+    fullBackground = ac.eraseEntireScreen + ac.cursorHome 
       + background
-      + "\u001B[" + firstPanelY + ";" + firstPanelX + "H"
+      + ac.CursorTo(firstPanelX, firstPanelY)
       + firstPanel
-      + "\u001B[" + secondPanelY + ";" + secondPanelX + "H"
+      + ac.CursorTo(secondPanelX, secondPanelY)
       + secondPanel
-      + "\u001B[" + thirdPanelY + ";" + thirdPanelX + "H"
-      + thirdPanel;
+      + ac.CursorTo(thirdPanelX, thirdPanelY)
+      + thirdPanel
+      + ac.CursorTo(inputBoxX, inputBoxY)
+      + inputBox;
   }
 
   public void DrawBackground()

@@ -21,11 +21,10 @@ public class Box
       fill+=" ";
     }
 
-
     middlePart = moveBelow 
       + fillColor + borderColor
       + ac.boxBorderVertical[borderType]
-      + fill 
+      + fill
       + ac.boxBorderVertical[borderType] 
       + backgroundColor;
 

@@ -25,7 +25,7 @@ public class POS
         case "r": draw.DrawBackground();
         case "n": {
           note = scanner.nextLine();
-          String text = textRender.TextFitter(8, 3, note);
+          String text = textRender.TextWrapper(8, 3, note);
           System.out.print(ac.CursorTo(3, 3) + text);
         }
       }
