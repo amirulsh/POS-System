@@ -4,12 +4,13 @@ public class POS
 {
   public static void main(String[] args) 
   {
-    Draw draw = new Draw();
+    int backgroundWidth = 120;
+    int backgroundHeight = 30;
+    Draw draw = new Draw(backgroundWidth, backgroundHeight);
     Scanner scanner = new Scanner(System.in);
     TextFormatter textRender = new TextFormatter();
     AsciiCode ac = new AsciiCode();
 
-    draw.PreConstruct(120, 30);
     draw.DrawBackground();
 
     String input;
@@ -27,7 +28,7 @@ out:
         case "n": {
           System.out.print(draw.inputBox);
           note = scanner.nextLine();
-          String text = textRender.TextWrapper(8, 3, note);
+          String text = textRender.AlignRight(8, 4, note);
           System.out.print(ac.CursorTo(3, 3) + text);
           System.out.print(draw.inputBox);
         }

@@ -2,11 +2,12 @@ package components;
 
 public class Draw
 {
-  Box box = new Box();
   AsciiCode ac = new AsciiCode();
-  
+  Box box;
   public String background;
   private String fullBackground;
+  private int backgroundWidth;
+  private int backgroundHeight;
 
   public String firstPanel;
   private int firstPanelWidth;
@@ -33,83 +34,82 @@ public class Draw
   private int inputBoxY;
   private String inputBoxColor = ac.RgbColor(true, 255, 255, 255);
 
-  private String panelColor =  "\u001B[48;5;110m";
-  private String backgroundColor = "\u001B[48;5;15m";
-  private String borderColor = "\u001B[38;5;17m";
+  private String panelColor = ac.RgbColor(true, 130, 200, 255);
+  private String backgroundColor = ac.RgbColor(true, 255, 255, 255);
+  private String borderColor = ac.RgbColor(false, 0, 0, 255);
 
-  private void CreateBoxes(int width, int height)
-  {
-    background = box.ConstructBox(
-        width,
-        height,
-        2,
-        borderColor,
-        backgroundColor,
-        "\u001B[49m",
-        width
-        );
+  public Draw(int width, int height) {
+    this.backgroundWidth = width;
+    this.backgroundHeight = height;
 
-    firstPanel = box.ConstructBox(
-        firstPanelWidth,
-        firstPanelHeight,
-        2,
-        borderColor,
-        panelColor,
-        backgroundColor,
-        width
-        );
+    firstPanelWidth = backgroundWidth * 6 / 10 - 2;
+    firstPanelHeight = backgroundHeight * 8 / 10 - 2;
 
-    secondPanel = box.ConstructBox(
-        secondPanelWidth,
-        secondPanelHeight,
-        2,
-        borderColor,
-        panelColor,
-        backgroundColor,
-        width
-        );
-
-    thirdPanel = box.ConstructBox(
-        thirdPanelWidth,
-        thirdPanelHeight,
-        2,
-        borderColor,
-        panelColor,
-        backgroundColor,
-        width
-        );
-
-    inputBox = ac.CursorTo(inputBoxX, inputBoxY);
-    inputBox+= box.ConstructBox(
-        inputBoxWidth,
-        inputBoxHeight,
-        1,
-        borderColor,
-        inputBoxColor,
-        backgroundColor,
-        width
-        );
-    inputBox+= ac.MoveCursor(1, 1) + ac.RgbColor(true, 255, 255, 255) + ac.RgbColor(false, 0, 100, 255);
-  }
-
-  public void PreConstruct(int width, int height)
-  {
-    firstPanelWidth = width * 6 / 10 - 2;
-    firstPanelHeight = height * 8 / 10 - 2;
-
-    secondPanelWidth = width - firstPanelWidth - 3;
-    secondPanelHeight = height - 2;
+    secondPanelWidth = backgroundWidth - firstPanelWidth - 3;
+    secondPanelHeight = backgroundHeight - 2;
     secondPanelX = firstPanelWidth + 3;
 
     thirdPanelWidth = firstPanelWidth;
-    thirdPanelHeight = height - firstPanelHeight - 3;
+    thirdPanelHeight = backgroundHeight - firstPanelHeight - 3;
     thirdPanelY = firstPanelHeight + 3;
 
     inputBoxWidth = thirdPanelWidth * 6 / 10 - 2;
     inputBoxX = thirdPanelX + 1;
     inputBoxY = thirdPanelY + 1;
 
+    box = new Box(backgroundWidth);
+
     CreateBoxes(width, height);
+  }  
+
+  private void CreateBoxes(int width, int height)
+  {
+    background = box.DrawBox(
+        width,
+        height,
+        2,
+        borderColor,
+        backgroundColor,
+        ac.ResetColor(true, false)
+        );
+
+    firstPanel = box.DrawBox(
+        firstPanelWidth,
+        firstPanelHeight,
+        2,
+        borderColor,
+        panelColor,
+        backgroundColor
+        );
+
+    secondPanel = box.DrawBox(
+        secondPanelWidth,
+        secondPanelHeight,
+        2,
+        borderColor,
+        panelColor,
+        backgroundColor
+        );
+
+    thirdPanel = box.DrawBox(
+        thirdPanelWidth,
+        thirdPanelHeight,
+        2,
+        borderColor,
+        panelColor,
+        backgroundColor
+        );
+
+    inputBox = ac.CursorTo(inputBoxX, inputBoxY);
+    inputBox+= box.DrawBox(
+        inputBoxWidth,
+        inputBoxHeight,
+        1,
+        borderColor,
+        inputBoxColor,
+        backgroundColor
+        );
+    inputBox+= ac.MoveCursor(1, 1) + ac.RgbColor(true, 255, 255, 255) + ac.RgbColor(false, 0, 100, 255);
 
     fullBackground = ac.eraseEntireScreen + ac.cursorHome 
       + background
@@ -126,5 +126,4 @@ public class Draw
   {
     System.out.print(fullBackground);
   }
-
 }

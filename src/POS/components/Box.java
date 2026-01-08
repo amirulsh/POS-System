@@ -4,7 +4,13 @@ public class Box
 {
   AsciiCode ac = new AsciiCode();
 
-  public String ConstructBox(int width, int height, int borderType, String borderColor, String fillColor, String backgroundColor, int backgroundWidth)
+  private int backgroundWidth;
+
+  public Box(int width) {
+    this.backgroundWidth = width;
+  }
+
+  public String DrawBox(int width, int height, int borderType, String borderColor, String fillColor, String backgroundColor)
   {
     String middlePart;
     String boxConstruct;

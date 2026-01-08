@@ -10,7 +10,6 @@ public class AsciiCode
   public String[] boxBorderBottomLeftCorner = {"\u2514", "\u2517", "\u255A"};
   public String[] boxBorderBottomRightCorner = {"\u2519", "\u251B", "\u255D"};
 
-  
   public String cursorHome = "\u001B[H";
   public String eraseEntireScreen = "\u001B2[J";
 
