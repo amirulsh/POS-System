@@ -79,7 +79,8 @@ public class Draw
         width
         );
 
-    inputBox = box.ConstructBox(
+    inputBox = ac.CursorTo(inputBoxX, inputBoxY);
+    inputBox+= box.ConstructBox(
         inputBoxWidth,
         inputBoxHeight,
         1,
@@ -88,7 +89,7 @@ public class Draw
         backgroundColor,
         width
         );
-    inputBox+= ac.MoveCursor(1, 1);
+    inputBox+= ac.MoveCursor(1, 1) + ac.RgbColor(true, 255, 255, 255) + ac.RgbColor(false, 0, 100, 255);
   }
 
   public void PreConstruct(int width, int height)
@@ -118,7 +119,6 @@ public class Draw
       + secondPanel
       + ac.CursorTo(thirdPanelX, thirdPanelY)
       + thirdPanel
-      + ac.CursorTo(inputBoxX, inputBoxY)
       + inputBox;
   }
 

@@ -6,28 +6,32 @@ public class POS
   {
     Draw draw = new Draw();
     Scanner scanner = new Scanner(System.in);
-    TextRender textRender = new TextRender();
+    TextFormatter textRender = new TextFormatter();
     AsciiCode ac = new AsciiCode();
 
     draw.PreConstruct(120, 30);
     draw.DrawBackground();
 
-    boolean running = true;
     String input;
     String note;
-    while(running)
+
+out:
+    while(true)
     {
       input = scanner.nextLine();
 
       switch(input)
       {
-        case "q": running = false;
+        case "q": break out;
         case "r": draw.DrawBackground();
         case "n": {
+          System.out.print(draw.inputBox);
           note = scanner.nextLine();
           String text = textRender.TextWrapper(8, 3, note);
           System.out.print(ac.CursorTo(3, 3) + text);
+          System.out.print(draw.inputBox);
         }
+        default: System.out.print(draw.inputBox);
       }
        
     }
