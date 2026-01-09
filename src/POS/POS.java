@@ -10,8 +10,11 @@ public class POS
     Scanner scanner = new Scanner(System.in);
     TextFormatter textRender = new TextFormatter();
     AsciiCode ac = new AsciiCode();
+    int[] list = {1, 2, 3, 4, 5, 6};
 
     draw.DrawBackground();
+    String options = draw.CreateOptions(list);
+    draw.DrawOptions(options);
 
     String input;
     String note;

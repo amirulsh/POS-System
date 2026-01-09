@@ -8,7 +8,7 @@ public class AsciiCode
   public String[] boxBorderTopLeftCorner = {"\u250C", "\u250F", "\u2554"};
   public String[] boxBorderTopRightCorner = {"\u2510", "\u2513", "\u2557"};
   public String[] boxBorderBottomLeftCorner = {"\u2514", "\u2517", "\u255A"};
-  public String[] boxBorderBottomRightCorner = {"\u2519", "\u251B", "\u255D"};
+  public String[] boxBorderBottomRightCorner = {"\u2518", "\u251B", "\u255D"};
 
   public String cursorHome = "\u001B[H";
   public String eraseEntireScreen = "\u001B2[J";
