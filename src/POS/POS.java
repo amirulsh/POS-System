@@ -23,15 +23,21 @@ out:
 
       switch(input)
       {
-        case "1": draw.DrawOrder();
-        case "q": break out;
-        case "r": draw.DrawStart();
+        case "1": 
+          draw.DrawOrder();
+          break;
+        case "q": 
+          break out;
+        case "r": 
+          draw.DrawStart();
+          break;
         case "n": {
           System.out.print(draw.inputBox);
           note = scanner.nextLine();
           String text = textRender.AlignRight(8, 4, note);
           System.out.print(ac.CursorTo(3, 3) + text);
           System.out.print(draw.inputBox);
+          break;
         }
         default: System.out.print(draw.inputBox);
       }
