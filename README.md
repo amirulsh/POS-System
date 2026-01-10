@@ -1,4 +1,5 @@
 # POS-System
+**In Progress**
 Simple Point of Sale system in terminal for learning purpose.
 All code is constrained from what learned in classes.
 
