@@ -3,10 +3,21 @@ package components;
 public class Draw
 {
   AsciiCode ac = new AsciiCode();
+  TextFormatter tf = new TextFormatter();
   Box box;
 
+
+  public String startPanel;
+  private int startPanelWidth;
+  private int startPanelHeight;
+  private int startPanelX = 2;
+  private int startPanelY = 2;
+  private String startPanelColor = ac.RgbColor(true, 121, 255, 181);
+  private String startBorderColor = ac.RgbColor(false, 2, 147, 0);
+
   public String background;
-  private String fullBackground;
+  private String startBackground;
+  private String orderBackground;
   private int backgroundWidth;
   private int backgroundHeight;
 
@@ -22,11 +33,12 @@ public class Draw
   private int secondPanelX;
   private int secondPanelY = 2;
 
-  public String thirdPanel;
-  private int thirdPanelWidth;
-  private int thirdPanelHeight;
-  private int thirdPanelX = 2;
-  private int thirdPanelY;
+  public String guidePanel;
+  public String startGuidePanel;
+  private int guidePanelWidth;
+  private int guidePanelHeight;
+  private int guidePanelX = 2;
+  private int guidePanelY;
 
   public String inputBox;
   private int inputBoxWidth;
@@ -45,7 +57,7 @@ public class Draw
 
   private String optionBoxColor = ac.RgbColor(true, 249, 255, 165);
   private String focusOptionBorderColor = ac.RgbColor(false, 255, 133, 0);
-  private String defaultOptionBorderColor = ac.RgbColor(false, 255, 208, 0);
+  private String defaultOptionBorderColor = ac.RgbColor(false, 255, 108, 0);
 
   private String panelColor = ac.RgbColor(true, 130, 200, 255);
   private String backgroundColor = ac.RgbColor(true, 255, 255, 255);
@@ -56,6 +68,8 @@ public class Draw
     this.backgroundWidth = width;
     this.backgroundHeight = height;
 
+
+
     firstPanelWidth = backgroundWidth * 6 / 10 - 2;
     firstPanelHeight = backgroundHeight * 8 / 10 - 2;
 
@@ -63,16 +77,18 @@ public class Draw
     secondPanelHeight = backgroundHeight - 2;
     secondPanelX = firstPanelWidth + 3;
 
-    thirdPanelWidth = firstPanelWidth;
-    thirdPanelHeight = backgroundHeight - firstPanelHeight - 3;
-    thirdPanelY = firstPanelHeight + 3;
+    guidePanelWidth = firstPanelWidth;
+    guidePanelHeight = backgroundHeight - firstPanelHeight - 3;
+    guidePanelY = firstPanelHeight + 3;
 
-    inputBoxWidth = thirdPanelWidth * 6 / 10 - 2;
-    inputBoxX = thirdPanelX + 1;
-    inputBoxY = thirdPanelY + 1;
+    startPanelWidth = backgroundWidth - 2;
+    startPanelHeight = backgroundHeight - 2 - guidePanelHeight;
 
-    optionBoxWidth = Math.min((firstPanelWidth - 2) / 2 - 1, 20);
-    optionBoxHeight = Math.min((firstPanelHeight - 2) / 2 - 1, 5);
+    inputBoxWidth = guidePanelWidth * 6 / 10 - 2;
+    inputBoxX = guidePanelX + 1;
+    inputBoxY = guidePanelY + 1;
+
+
 
     box = new Box(backgroundWidth);
 
@@ -90,6 +106,35 @@ public class Draw
         backgroundColor,
         ac.ResetColor(true, false)
         );
+
+    guidePanel = ac.CursorTo(guidePanelX, guidePanelY);
+    guidePanel+= box.DrawBox(
+        guidePanelWidth,
+        guidePanelHeight,
+        2,
+        borderColor,
+        panelColor,
+        backgroundColor
+        );
+
+    startGuidePanel = ac.CursorTo(guidePanelX, guidePanelY);
+    startGuidePanel+= box.DrawBox(
+        startPanelWidth,
+        guidePanelHeight,
+        2,
+        borderColor,
+        panelColor,
+        backgroundColor
+        );
+
+    startPanel = ac.CursorTo(startPanelX, startPanelY);
+    startPanel+= box.DrawBox(
+        startPanelWidth, 
+        startPanelHeight,
+        2, 
+        startBorderColor, 
+        startPanelColor, 
+        backgroundColor);
 
     firstPanel =  ac.CursorTo(firstPanelX, firstPanelY);
     firstPanel+= box.DrawBox(
@@ -111,16 +156,6 @@ public class Draw
         backgroundColor
         );
 
-    thirdPanel = ac.CursorTo(thirdPanelX, thirdPanelY);
-    thirdPanel+= box.DrawBox(
-        thirdPanelWidth,
-        thirdPanelHeight,
-        2,
-        borderColor,
-        panelColor,
-        backgroundColor
-        );
-
     inputBox = ac.CursorTo(inputBoxX, inputBoxY);
     inputBox+= box.DrawBox(
         inputBoxWidth,
@@ -130,30 +165,41 @@ public class Draw
         inputBoxColor,
         backgroundColor
         );
+
     inputBox+= ac.MoveCursor(1, 1) + ac.RgbColor(true, 255, 255, 255) + ac.RgbColor(false, 0, 100, 255);
 
-    fullBackground = background
+    String[] category = {"Order", "Sales"};
+    startBackground = background
+      + startPanel
+      + startGuidePanel
+      + CreateOptions(category, startPanelWidth, startPanelHeight)
+      + inputBox;
+
+    category = new String[]{"Food", "Beverage"};
+    orderBackground = background
       + firstPanel
       + secondPanel
-      + thirdPanel
+      + guidePanel
+      + CreateOptions(category, firstPanelWidth, firstPanelHeight)
       + inputBox;
+
   }
 
-  public int[] positioningOptionBox(int[] optionList)
+  public int[] positioningOptionBox(String[] optionList, int panelWidth, int panelHeight)
   {
     int optionCount = optionList.length;
     int[] optionPosition = new int[optionCount * 2];
     int fitHeight;
     int fitWidth;
     
-    if (firstPanelWidth - 2 < optionBoxWidthMin || firstPanelHeight - 2 < optionBoxHeightMin)
+    if (panelWidth - 2 < optionBoxWidthMin || panelHeight - 2 < optionBoxHeightMin)
     {
       return new int[]{0};
     }
     else 
     {
-      int maxFitWidth = firstPanelWidth / optionBoxWidthMin;
-      int maxFitHeight = firstPanelHeight / optionBoxHeightMin;
+      int maxFitWidth = panelWidth / optionBoxWidthMin;
+      int maxFitHeight = panelHeight / optionBoxHeightMin;
 
       if (maxFitWidth * maxFitHeight >= optionCount)
       {
@@ -163,18 +209,18 @@ public class Draw
       else return new int[]{0};
     }
 
-    optionBoxWidth = (firstPanelWidth - 2) / fitWidth - 1;
+    optionBoxWidth = (panelWidth - 2) / fitWidth - 1;
     optionBoxHeight = (int) Math.round((double) optionBoxHeightMin / optionBoxWidthMin * optionBoxWidth);
 
-    if (optionBoxHeight * fitHeight > firstPanelHeight - fitHeight - 1)
+    if (optionBoxHeight * fitHeight > panelHeight - fitHeight - 1)
     {
-      optionBoxHeight = (firstPanelHeight - 2) / fitHeight - 1;
+      optionBoxHeight = (panelHeight - 2) / fitHeight - 1;
       optionBoxWidth = (int) Math.round((double) optionBoxWidthMin / optionBoxHeightMin * optionBoxHeight);
 
     }
 
-    optionPosition[0] = firstPanelX + (firstPanelWidth - optionBoxWidth * fitWidth - (fitWidth - 1)) / 2;
-    optionPosition[1] = firstPanelY + (firstPanelHeight - optionBoxHeight * fitHeight - (fitHeight - 1)) / 2;
+    optionPosition[0] = 2 + (panelWidth - optionBoxWidth * fitWidth - (fitWidth - 1)) / 2;
+    optionPosition[1] = 2 + (panelHeight - optionBoxHeight * fitHeight - (fitHeight - 1)) / 2;
 
     for (int row = 0; row < fitHeight; row++) {
       for (int column = 0; column < fitWidth; column++) {
@@ -189,9 +235,11 @@ public class Draw
     return optionPosition;
   }
 
-  public String CreateOptions(int[] optionList)
+  public String CreateOptions(String[] optionList, int panelWidth, int panelHeight)
   { 
-    int[] optionPosition = positioningOptionBox(optionList);
+    optionBoxWidth = Math.min((panelWidth - 2) / 2 - 1, 20);
+    optionBoxHeight = Math.min((panelHeight - 2) / 2 - 1, 5);
+    int[] optionPosition = positioningOptionBox(optionList, panelWidth, panelHeight);
 
     optionBox = box.DrawBox(
         optionBoxWidth,
@@ -216,6 +264,12 @@ public class Draw
     for (int i = 1; i < optionPosition.length; i+=2)
     {
       options+= ac.CursorTo(optionPosition[i - 1], optionPosition[i]) + optionBox;
+      String text = tf.AlignCenter(optionBoxWidth - 2, optionBoxHeight - 2, optionList[i / 2]);
+     int textHeight = tf.GetTextHeight();
+      options+= optionBoxColor + defaultOptionBorderColor
+        + ac.MoveCursor(1, 1) + (i / 2 + 1) 
+        + ac.MoveCursor(-1, (optionBoxHeight - 2 - textHeight) / 2) 
+        + text;
     }
     return options;
   }
@@ -225,8 +279,12 @@ public class Draw
     System.out.print(options);
   }
 
-  public void DrawBackground()
+  public void DrawStart()
   {
-    System.out.print(fullBackground);
+    System.out.print(startBackground);
+  }
+  public void DrawOrder()
+  {
+    System.out.print(orderBackground);
   }
 }

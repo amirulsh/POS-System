@@ -10,11 +10,8 @@ public class POS
     Scanner scanner = new Scanner(System.in);
     TextFormatter textRender = new TextFormatter();
     AsciiCode ac = new AsciiCode();
-    int[] list = {1, 2, 3, 4, 5, 6};
 
-    draw.DrawBackground();
-    String options = draw.CreateOptions(list);
-    draw.DrawOptions(options);
+    draw.DrawStart();
 
     String input;
     String note;
@@ -26,8 +23,9 @@ out:
 
       switch(input)
       {
+        case "1": draw.DrawOrder();
         case "q": break out;
-        case "r": draw.DrawBackground();
+        case "r": draw.DrawStart();
         case "n": {
           System.out.print(draw.inputBox);
           note = scanner.nextLine();

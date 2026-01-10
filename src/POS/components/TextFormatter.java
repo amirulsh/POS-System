@@ -4,6 +4,7 @@ public class TextFormatter
 {
   AsciiCode ac = new AsciiCode();
 
+  private int textHeight;
 
   public String[] WrapText(int width, int height, String text)
   {
@@ -39,6 +40,7 @@ public class TextFormatter
       {
         if(lineCount == height)
         {
+          textHeight = lineCount + 1;
           if (textLength >= splitOffset + width + 1)
           {
             textList[lineIndex] = new String(textChar, splitOffset, (width - 3)) + "...";
@@ -82,6 +84,7 @@ public class TextFormatter
     {
       newTextList[i] = textList[i];
     }
+    textLength = lineCount;
     return newTextList;
   }
 
@@ -138,5 +141,12 @@ public class TextFormatter
       alignedLine+= startLineAt + line;
     }
     return alignedLine;
+  }
+
+
+  public int GetTextHeight()
+  {
+    textHeight = 0;
+    return textHeight;
   }
 }
