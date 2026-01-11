@@ -88,21 +88,20 @@ public class TextFormatter
     return newTextList;
   }
 
-  public String AlignCenter(int width, int height, String text)
+  public String AlignCenter(int width, int height, String[] textList)
   {
-    String[] wrappedText = WrapText(width, height, text);
     String line;
     String alignedLine = "";
 
-    int padding = ((width - wrappedText[0].length()) / 2);
+    int padding = ((width - textList[0].length()) / 2);
     String lineStart = ac.MoveCursor(padding, 0);
-    alignedLine = lineStart + wrappedText[0];
+    alignedLine = lineStart + textList[0];
     
-    int startNextLength = wrappedText[0].length() + padding;
+    int startNextLength = textList[0].length() + padding;
 
-    for (int i = 1; i < wrappedText.length; i++)
+    for (int i = 1; i < textList.length; i++)
     {
-      line = wrappedText[i];
+      line = textList[i];
       int length = line.length();
       padding = ((width - length) / 2);
 
@@ -112,31 +111,29 @@ public class TextFormatter
     return alignedLine;
   }
 
-  public String AlignLeft(int width, int height, String text)
+  public String AlignLeft(String[] textList)
   {
-    String[] wrappedText = WrapText(width, height, text);
     String line;
     String alignedLine = "";
-    for (int i = 0; i < wrappedText.length; i++)
+    for (int i = 0; i < textList.length; i++)
     {
-      line = wrappedText[i];
+      line = textList[i];
       alignedLine+= line;
-      if (i == wrappedText.length - 1) return alignedLine;
+      if (i == textList.length - 1) return alignedLine;
       alignedLine+= ac.MoveCursor(-(line.length()), 1);
     }
     return alignedLine;
   }
 
-  public String AlignRight(int width, int height, String text)
+  public String AlignRight(String[] textList)
   {
-    String[] wrappedText = WrapText(width, height, text);
-    String line = wrappedText[0];
+    String line = textList[0];
     String alignedLine = line;
 
 
-    for (int i = 1; i < wrappedText.length; i++)
+    for (int i = 1; i < textList.length; i++)
     {
-      line = wrappedText[i];
+      line = textList[i];
       String startLineAt = ac.MoveCursor(-(line.length()), 1);
       alignedLine+= startLineAt + line;
     }

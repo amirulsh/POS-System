@@ -16,22 +16,22 @@ public class Draw
   private String startBorderColor = ac.RgbColor(false, 2, 147, 0);
 
   public String background;
-  private String startBackground;
-  private String orderBackground;
+  public String startBackground;
+  public String orderBackground;
   private int backgroundWidth;
   private int backgroundHeight;
 
   public String firstPanel;
-  private int firstPanelWidth;
-  private int firstPanelHeight;
+  public int firstPanelWidth;
+  public int firstPanelHeight;
   private int firstPanelX = 2;
   private int firstPanelY = 2;
 
   public String secondPanel;
-  private int secondPanelWidth;
-  private int secondPanelHeight;
-  private int secondPanelX;
-  private int secondPanelY = 2;
+  public int secondPanelWidth;
+  public int secondPanelHeight;
+  public int secondPanelX;
+  public int secondPanelY = 2;
 
   public String guidePanel;
   public String startGuidePanel;
@@ -47,16 +47,17 @@ public class Draw
   private int inputBoxY;
   private String inputBoxColor = ac.RgbColor(true, 255, 255, 255);
 
-  public String optionBox;
-  private String focusedOptionBox;
   private int optionBoxWidth;
   private int optionBoxHeight;
   private int optionBoxWidthMin = 12;
   private int optionBoxHeightMin = 4;
+
+  public String[] startOptions;
   
 
+  private String focusOptionColor = ac.RgbColor(true, 255, 168, 128);
   private String optionBoxColor = ac.RgbColor(true, 249, 255, 165);
-  private String focusOptionBorderColor = ac.RgbColor(false, 255, 133, 0);
+  private String focusOptionBorderColor = ac.RgbColor(false, 255, 54, 0);
   private String defaultOptionBorderColor = ac.RgbColor(false, 255, 108, 0);
 
   private String panelColor = ac.RgbColor(true, 130, 200, 255);
@@ -67,7 +68,6 @@ public class Draw
   public Draw(int width, int height) {
     this.backgroundWidth = width;
     this.backgroundHeight = height;
-
 
 
     firstPanelWidth = backgroundWidth * 6 / 10 - 2;
@@ -168,20 +168,18 @@ public class Draw
 
     inputBox+= ac.MoveCursor(1, 1) + ac.RgbColor(true, 255, 255, 255) + ac.RgbColor(false, 0, 100, 255);
 
+
     String[] category = {"Order", "Sales"};
     startBackground = background
       + startPanel
-      + startGuidePanel
-      + CreateOptions(category, startPanelWidth, startPanelHeight)
-      + inputBox;
+      + startGuidePanel;
 
+    startOptions = CreateOptions(category, startPanelWidth, startPanelHeight);
     category = new String[]{"Food", "Beverage"};
     orderBackground = background
       + firstPanel
       + secondPanel
-      + guidePanel
-      + CreateOptions(category, firstPanelWidth, firstPanelHeight)
-      + inputBox;
+      + guidePanel;
 
   }
 
@@ -216,7 +214,6 @@ public class Draw
     {
       optionBoxHeight = (panelHeight - 2) / fitHeight - 1;
       optionBoxWidth = (int) Math.round((double) optionBoxWidthMin / optionBoxHeightMin * optionBoxHeight);
-
     }
 
     optionPosition[0] = 2 + (panelWidth - optionBoxWidth * fitWidth - (fitWidth - 1)) / 2;
@@ -235,11 +232,15 @@ public class Draw
     return optionPosition;
   }
 
-  public String CreateOptions(String[] optionList, int panelWidth, int panelHeight)
+  public String[] CreateOptions(String[] optionList, int panelWidth, int panelHeight)
   { 
     optionBoxWidth = Math.min((panelWidth - 2) / 2 - 1, 20);
     optionBoxHeight = Math.min((panelHeight - 2) / 2 - 1, 5);
     int[] optionPosition = positioningOptionBox(optionList, panelWidth, panelHeight);
+    String[] optionBoxList = new String[optionList.length + 1];
+
+    String optionBox;
+    String focusedOptionBox;
 
     optionBox = box.DrawBox(
         optionBoxWidth,
@@ -255,23 +256,39 @@ public class Draw
         optionBoxHeight,
         1,
         focusOptionBorderColor,
-        optionBoxColor,
+        focusOptionColor,
         backgroundColor
         );
 
-    String options = "";
-
-    for (int i = 1; i < optionPosition.length; i+=2)
+    
+    for (int focus = 0; focus <= optionList.length; focus++)
     {
-      options+= ac.CursorTo(optionPosition[i - 1], optionPosition[i]) + optionBox;
-      String text = tf.AlignCenter(optionBoxWidth - 2, optionBoxHeight - 2, optionList[i / 2]);
-     int textHeight = tf.GetTextHeight();
-      options+= optionBoxColor + defaultOptionBorderColor
-        + ac.MoveCursor(1, 1) + (i / 2 + 1) 
-        + ac.MoveCursor(-1, (optionBoxHeight - 2 - textHeight) / 2) 
-        + text;
+    String options = "";
+    for (int i = 1; i <= optionPosition.length; i+=2)
+    {
+      String[] textList = tf.WrapText(optionBoxWidth - 2, optionBoxHeight - 2, optionList[i / 2]);
+      String text = tf.AlignCenter(optionBoxWidth - 2, optionBoxHeight - 2, textList);
+      int textHeight = tf.GetTextHeight();
+      if (i / 2 + 1 != focus)
+      {
+        options+= ac.CursorTo(optionPosition[i - 1], optionPosition[i]) + optionBox;
+        options+= optionBoxColor + defaultOptionBorderColor
+          + ac.MoveCursor(1, 1) + (i / 2 + 1) 
+          + ac.MoveCursor(-1, (optionBoxHeight - 2 - textHeight) / 2) 
+          + text;
+      }
+      else
+      {
+        options+= ac.CursorTo(optionPosition[i - 1], optionPosition[i]) + focusedOptionBox;
+        options+= focusOptionColor + focusOptionBorderColor
+          + ac.MoveCursor(1, 1) + (i / 2 + 1) 
+          + ac.MoveCursor(-1, (optionBoxHeight - 2 - textHeight) / 2) 
+          + text;
+      }
     }
-    return options;
+    optionBoxList[focus] = options;
+    }
+    return optionBoxList;
   }
 
   public void DrawOptions(String options)

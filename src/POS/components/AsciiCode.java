@@ -1,20 +1,20 @@
 package components;
 public class AsciiCode
 {
-  private String escapeCode = "\u001B[";
+  private final String escapeCode = "\u001B[";
 
-  public String[] boxBorderHorizon = {"\u2500", "\u2501", "\u2550"};
-  public String[] boxBorderVertical = {"\u2502", "\u2503", "\u2551"};
-  public String[] boxBorderTopLeftCorner = {"\u250C", "\u250F", "\u2554"};
-  public String[] boxBorderTopRightCorner = {"\u2510", "\u2513", "\u2557"};
-  public String[] boxBorderBottomLeftCorner = {"\u2514", "\u2517", "\u255A"};
-  public String[] boxBorderBottomRightCorner = {"\u2518", "\u251B", "\u255D"};
+  public final String[] boxBorderHorizon = {"\u2500", "\u2501", "\u2550"};
+  public final String[] boxBorderVertical = {"\u2502", "\u2503", "\u2551"};
+  public final String[] boxBorderTopLeftCorner = {"\u250C", "\u250F", "\u2554"};
+  public final String[] boxBorderTopRightCorner = {"\u2510", "\u2513", "\u2557"};
+  public final String[] boxBorderBottomLeftCorner = {"\u2514", "\u2517", "\u255A"};
+  public final String[] boxBorderBottomRightCorner = {"\u2518", "\u251B", "\u255D"};
 
-  public String cursorHome = "\u001B[H";
-  public String eraseEntireScreen = "\u001B2[J";
+  public final String cursorHome = "\u001B[H";
+  public final String eraseEntireScreen = "\u001B2[J";
 
-  public String saveCursor = "\u001B[s";
-  public String loadCursor = "\u001B[u";
+  public final String saveCursor = "\u001B[s";
+  public final String loadCursor = "\u001B[u";
 
   public String CursorTo(int x, int y)
   {
