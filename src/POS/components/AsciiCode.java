@@ -15,6 +15,8 @@ public class AsciiCode
 
   public final String saveCursor = "\u001B[s";
   public final String loadCursor = "\u001B[u";
+  public final String bold = "\u001B[1m";
+  public final String resetBold = "\u001B[22m";
 
   public String CursorTo(int x, int y)
   {

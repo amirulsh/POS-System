@@ -5,14 +5,15 @@ public class Draw
   AsciiCode ac = new AsciiCode();
   TextFormatter tf = new TextFormatter();
   Box box;
+  Item item;
 
   public String startPanel;
   public int startPanelWidth;
   private int startPanelHeight;
-  private int startPanelX = 2;
-  private int startPanelY = 2;
-  private String startPanelColor = ac.RgbColor(true, 121, 255, 181);
-  private String startBorderColor = ac.RgbColor(false, 2, 147, 0);
+  public int startPanelX = 2;
+  public int startPanelY = 2;
+  public String startPanelColor = ac.RgbColor(true, 121, 255, 181);
+  public String startBorderColor = ac.RgbColor(false, 2, 147, 0);
 
   public String background;
   public String startBackground;
@@ -23,8 +24,8 @@ public class Draw
   public String firstPanel;
   public int firstPanelWidth;
   public int firstPanelHeight;
-  private int firstPanelX = 2;
-  private int firstPanelY = 2;
+  public int firstPanelX = 2;
+  public int firstPanelY = 2;
 
   public String secondPanel;
   public int secondPanelWidth;
@@ -43,7 +44,7 @@ public class Draw
   private int inputBoxWidth;
   private int inputBoxHeight = 3;
   private int inputBoxX;
-  private int inputBoxY;
+  public int inputBoxY;
   private String inputBoxColor = ac.RgbColor(true, 255, 255, 255);
 
   private int optionBoxWidth;
@@ -58,18 +59,19 @@ public class Draw
   private int paymentPanelX;
   private int paymentPanelY;
 
+  public int keybindsX;
+
   private String focusOptionColor = ac.RgbColor(true, 255, 168, 128);
   private String optionBoxColor = ac.RgbColor(true, 249, 255, 165);
   private String focusOptionBorderColor = ac.RgbColor(false, 255, 54, 0);
   private String defaultOptionBorderColor = ac.RgbColor(false, 255, 108, 0);
 
-  private String panelColor = ac.RgbColor(true, 130, 200, 255);
+  public String panelColor = ac.RgbColor(true, 130, 200, 255);
   private String backgroundColor = ac.RgbColor(true, 255, 255, 255);
-  private String borderColor = ac.RgbColor(false, 0, 0, 255);
+  public String borderColor = ac.RgbColor(false, 0, 0, 255);
 
-  public double totalPriceAfterSst;
-
-  public Draw(int width, int height) {
+  public Draw(int width, int height, Item item) {
+    this.item = item;
     this.backgroundWidth = width;
     this.backgroundHeight = height;
 
@@ -97,6 +99,7 @@ public class Draw
     paymentPanelY = firstPanelY + 2;
     paymentPanelX = firstPanelX + 2;
 
+    keybindsX = inputBoxX + inputBoxWidth + 2;
 
 
     box = new Box(backgroundWidth);
@@ -164,6 +167,7 @@ public class Draw
         panelColor,
         backgroundColor
         );
+    secondPanel+= ac.MoveCursor((secondPanelWidth - 5) / 2, 0) + panelColor + borderColor + ac.bold + "Order" + ac.resetBold;
 
     inputBox = ac.CursorTo(inputBoxX, inputBoxY);
     inputBox+= box.DrawBox(
@@ -174,7 +178,8 @@ public class Draw
         inputBoxColor,
         backgroundColor
         );
-    inputBox+= ac.MoveCursor(1, 1) + ac.RgbColor(true, 255, 255, 255) + ac.RgbColor(false, 0, 100, 255);
+    inputBox+= ac.MoveCursor(1, 0) + inputBoxColor + borderColor + ac.bold + "Input" + ac.resetBold;
+    inputBox+= ac.CursorTo(inputBoxX + 1, inputBoxY + 1) + backgroundColor + borderColor;
 
     paymentPanel = ac.CursorTo(paymentPanelX, paymentPanelY);
     paymentPanel+= box.DrawBox(
@@ -185,6 +190,7 @@ public class Draw
         inputBoxColor,
         backgroundColor
         );
+    paymentPanel+= ac.MoveCursor(1, 0) +  backgroundColor + borderColor + ac.bold + "Payment" + ac.bold;
     
 
     startBackground = background
@@ -230,6 +236,8 @@ public class Draw
       optionBoxHeight = (panelHeight - 2) / fitHeight - 1;
       optionBoxWidth = (int) Math.round((double) optionBoxWidthMin / optionBoxHeightMin * optionBoxHeight);
     }
+    optionBoxWidth = Math.min(optionBoxWidth, optionBoxWidthMin * 3);
+    optionBoxHeight = Math.min(optionBoxHeight, optionBoxHeightMin * 3);
 
     optionPosition[0] = 2 + (panelWidth - optionBoxWidth * fitWidth - (fitWidth - 1)) / 2;
     optionPosition[1] = 2 + (panelHeight - optionBoxHeight * fitHeight - (fitHeight - 1)) / 2;
@@ -306,7 +314,7 @@ public class Draw
     return optionBoxList;
   }
 
-  public String DisplayItem(Item item)
+  public String DisplayItem()
   {
     String[] itemList = item.GetList();
     double[] priceList = item.GetPriceList();
@@ -316,27 +324,24 @@ public class Draw
     String[] itemLine = new String[itemList.length * 2];
     String[] priceLine = new String[priceList.length * 2];
 
-    double totalPrice = 0;
     for (int i = 0; i < itemList.length; i++)
     {
       int ii = i * 2;
       double price = priceList[i];
       int count = itemCount[i];
-      double totalItemPrice = price * count;
-      totalPrice+= price * count;
       if (ii > secondPanelHeight - 7) continue;
       
       itemLine[ii] = itemList[i];
       itemLine[ii + 1] = " x " + count;
       priceLine[ii] = "RM" + String.format("%.2f", price) + "       ";
-      priceLine[ii + 1] = "RM" + String.format("%.2f", totalItemPrice);
+      priceLine[ii + 1] = "RM" + String.format("%.2f", price * count);
     }
 
     int totalPriceDisplayY = secondPanelY + secondPanelHeight - 5;
     int totalPriceDisplayX = secondPanelX + secondPanelWidth - 1;
-    double sstPrice = totalPrice * 0.06;
-    totalPriceAfterSst = totalPrice + sstPrice;
-    String formatedTotalPrice = String.format("%.2f", totalPrice);
+    double sstPrice = item.allListTotalPrice * 0.06;
+    double totalPriceAfterSst = item.allListTotalPrice + sstPrice;
+    String formatedTotalPrice = String.format("%.2f", item.allListTotalPrice);
     String formatedSstPrice = String.format("%.2f", sstPrice);
     String formatedPriceAfterSst = String.format("%.2f", totalPriceAfterSst);
 
@@ -357,13 +362,13 @@ public class Draw
     return itemDisplay;
   }
 
-  public String RenderPayment(double input)
+  public String RenderPayment(double input, boolean card, boolean cash)
   {
-    String output = paymentPanel + ac.MoveCursor(1, 1) 
-      + "Total Price: RM" + String.format("%.2f", totalPriceAfterSst);
+    String output = paymentPanel + ac.CursorTo(paymentPanelX + 1, paymentPanelY + 1) 
+      + "Total Price: RM" + String.format("%.2f", item.allListTotalPrice * 1.06);
     if (input > 0)
     {
-      double balance = input - totalPriceAfterSst;
+      double balance = input - item.allListTotalPrice * 1.06;
       output+= ac.CursorTo(paymentPanelX + 1, paymentPanelY + 2) 
         + "Entered: RM" + String.format("%.2f", input)
         + ac.CursorTo(paymentPanelX + 1, paymentPanelY + 3)
@@ -371,14 +376,24 @@ public class Draw
         + ac.CursorTo(paymentPanelX + 1, paymentPanelY + 5)
         + "Proceed? Y/N";
     }
+    else if (cash)
+    {
+      output+= ac.CursorTo(paymentPanelX + 1, paymentPanelY + 5)
+        + "Enter cash amount.";
+    }
+    if (card)
+    {
+      output+= ac.CursorTo(paymentPanelX + 1, paymentPanelY + 5)
+        + "Proceed? Y/N";
+    }
+    output+= ac.resetBold;
     return output;
   }
 
 
-  public String RenderSale(Item item)
+  public String RenderSale()
   {
     String sale = startPanelColor + startBorderColor;
-    double totalPrice = 0;
 
     int columnWidth = 40; // adjust to your box width
 
@@ -394,8 +409,6 @@ public class Draw
       String leftLine = item.itemsName[i] + " x " + item.itemsCount[i];
       String price = "RM" + String.format("%.2f", item.itemsPrice[i]);
 
-      totalPrice += item.itemsPrice[i] * item.itemsCount[i];
-
       int spacing = columnWidth - id.length() - leftLine.length() - price.length();
 
       sale += ac.CursorTo(x, y)
@@ -405,8 +418,8 @@ public class Draw
         + price;
     }
 
-    String formattedTotalPrice = "RM" + String.format("%.2f", totalPrice);
-    String formattedTotalPriceAfterSst = "RM" + String.format("%.2f", totalPrice * 1.06);
+    String formattedTotalPrice = "RM" + String.format("%.2f", item.allItemTotalPrice);
+    String formattedTotalPriceAfterSst = "RM" + String.format("%.2f", item.allItemTotalPrice * 1.06);
     sale += ac.MoveCursor(-formattedTotalPrice.length() - 7, 2) + "Total: "+ formattedTotalPrice
       + ac.MoveCursor(-formattedTotalPrice.length() - 17, 1) + "Total after sst: "+ formattedTotalPriceAfterSst;
 
