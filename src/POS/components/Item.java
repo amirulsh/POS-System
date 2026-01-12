@@ -20,8 +20,6 @@ public class Item
   {
     nameItems();
   }
-  
-
 
   private int indexFood = 0;
   private int indexColdBeverage = catalogue.food.length;
@@ -29,26 +27,39 @@ public class Item
   private int itemArrayLength = indexHotBeverage + catalogue.beverage.length;
 
   private String[] itemsName = new String[itemArrayLength];
-  private String[] itemsCount = new String[itemArrayLength];
+  private int[] itemsCount = new int[itemArrayLength];
+  private double[] itemsPrice = new double[itemArrayLength];
 
   private String[] itemListDisplay = new String[itemArrayLength];
+  private double[] itemListPrice = new double[itemArrayLength];
   private int[] itemListId = new int[itemArrayLength];
   private int[] itemListCount = new int[itemArrayLength];
-  private String[] itemPricesDisplay = new String[200];
-  private int lastIndex = 0;
+  public int lastIndex = 0;
   
   private void nameItems()
   {
+    double[] price;
     int i = 0;
-    for (String item: catalogue.food)
+    for (int fd = 0; fd < catalogue.food.length; fd++)
     {
-      itemsName[i++] = item;
+      itemsPrice[i] = catalogue.foodPrice[fd];
+      itemsName[i++] = catalogue.food[fd];
     }
-    for (String addon: catalogue.addons)
+    for (int ad = 0; ad < catalogue.addons.length; ad++)
     {
-      for (String item: catalogue.beverage)
+      if(ad == 0)
       {
-        itemsName[i++] = item + " - " + addon;
+      price = catalogue.beveragePriceCold;
+      } 
+      else
+      {
+       price = catalogue.beveragePriceHot;
+      }
+
+      for (int bv = 0; bv < catalogue.beverage.length; bv++)
+      {
+        itemsPrice[i] = price[bv];
+        itemsName[i++] = catalogue.beverage[bv] + " - " + catalogue.addons[ad];
       }
     }
   }
@@ -74,12 +85,8 @@ public class Item
     return catalogue.addons;
   }
 
-  private void addBeverage()
-  {
 
-  }
-
-  public String[] RegisterItem(int categoryId, int input)
+  public void RegisterItem(int categoryId, int input)
   {
     int index = 0;
     if (categoryId == 1)
@@ -109,13 +116,57 @@ public class Item
     {
       itemListId[lastIndex] = index;
       itemListDisplay[lastIndex] = itemsName[index];
+      itemListPrice[lastIndex] = itemsPrice[index];
+      itemListCount[lastIndex] = 1;
       lastIndex++;
     }
+  }
+
+  public String[] GetList()
+  { 
     String[] list = new String[lastIndex];
     for (int i = 0; i < lastIndex; i++ )
     {
       list[i] = itemListDisplay[i];
     }
     return list;
+  }
+
+  public double[] GetPriceList()
+  {
+    double[] list = new double[lastIndex];
+    for (int i = 0; i < lastIndex; i++ )
+    {
+      list[i] = itemListPrice[i];
+    }
+    return list;
+  } 
+
+  public int[] GetCountList()
+  {
+    int[] list = new int[lastIndex];
+    for (int i = 0; i < lastIndex; i++ )
+    {
+      list[i] = itemListCount[i];
+    }
+    return list;
+  }
+
+
+  public void voidItem()
+  {
+  itemListDisplay = new String[itemArrayLength];
+  itemListPrice = new double[itemArrayLength];
+  itemListId = new int[itemArrayLength];
+  itemListCount = new int[itemArrayLength];
+  lastIndex = 0;
+  }
+
+  public void Paid()
+  {
+    for (int i = 0; i < itemListId.length; i++)
+    {
+      itemsCount[itemListId[i]] = itemListCount[i];
+    }
   }
 }

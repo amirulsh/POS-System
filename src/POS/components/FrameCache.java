@@ -19,6 +19,8 @@ public class FrameCache
   public int indexFood;
   public int indexBeverage;
   public int indexAddons;
+  public int indexSale;
+  public int indexPayment;
 
   private void ExpandFocus(String[] optionList, String panel, String background)
   {
@@ -38,15 +40,17 @@ public class FrameCache
     String[] food = item.GetFood();
     String[] beverage = item.GetBeverage();
     String[] addons = item.GetAddons();
+    String[] startOption = {"Order", "Sale"};
 
 
+    startOption = draw.CreateOptions(startOption, draw.startPanelWidth, draw.firstPanelHeight);
     category = draw.CreateOptions(category, draw.firstPanelWidth, draw.firstPanelHeight);
     food = draw.CreateOptions(food, draw.firstPanelWidth, draw.firstPanelHeight);
     beverage = draw.CreateOptions(beverage, draw.firstPanelWidth, draw.firstPanelHeight);
     addons = draw.CreateOptions(addons, draw.firstPanelWidth, draw.firstPanelHeight);
     indexStart = nextFrame;
 
-    ExpandFocus(draw.startOptions, draw.startPanel, draw.startBackground);
+    ExpandFocus(startOption, draw.startPanel, draw.startBackground);
     indexOrder = nextFrame;
     ExpandFocus(category, draw.firstPanel, draw.orderBackground);
     indexFood = nextFrame;
@@ -55,6 +59,10 @@ public class FrameCache
     ExpandFocus(beverage, draw.firstPanel, draw.orderBackground);
     indexAddons = nextFrame;
     ExpandFocus(addons, draw.firstPanel, draw.orderBackground);
+    indexPayment = nextFrame;
+    frame[nextFrame++] = draw.firstPanel + draw.paymentPanel;
+    indexSale = nextFrame;
+    frame[nextFrame++] = draw.startBackground;
 
   }
 
