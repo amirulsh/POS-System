@@ -138,6 +138,7 @@ out:
               state = nextState;
               System.out.print(fc.frame[frameState[state]]);
               nextState = 0;
+              if (state == 2) System.out.print(draw.RenderSale(item));
               continue;
             }
             System.out.print(fc.frame[frameState[state]]);

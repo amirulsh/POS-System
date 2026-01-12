@@ -306,8 +306,6 @@ public class Draw
     return optionBoxList;
   }
 
-
-
   public String DisplayItem(Item item)
   {
     String[] itemList = item.GetList();
@@ -332,9 +330,8 @@ public class Draw
       itemLine[ii + 1] = " x " + count;
       priceLine[ii] = "RM" + String.format("%.2f", price) + "       ";
       priceLine[ii + 1] = "RM" + String.format("%.2f", totalItemPrice);
-      
-      
     }
+
     int totalPriceDisplayY = secondPanelY + secondPanelHeight - 5;
     int totalPriceDisplayX = secondPanelX + secondPanelWidth - 1;
     double sstPrice = totalPrice * 0.06;
@@ -373,8 +370,46 @@ public class Draw
         + "Balance: RM" + String.format("%.2f", balance)
         + ac.CursorTo(paymentPanelX + 1, paymentPanelY + 5)
         + "Proceed? Y/N";
-      
     }
     return output;
+  }
+
+
+  public String RenderSale(Item item)
+  {
+    String sale = startPanelColor + startBorderColor;
+    double totalPrice = 0;
+
+    int columnWidth = 40; // adjust to your box width
+
+    for (int i = 0; i < item.itemsName.length; i++)
+    {
+      int column = i / (startPanelHeight - 2);
+      int row = i % (startPanelHeight - 2);
+
+      int x = startPanelX + 1 + (column * (columnWidth + 1));
+      int y = startPanelY + 1 + row;
+
+      String id = (i + 1) + ". ";
+      String leftLine = item.itemsName[i] + " x " + item.itemsCount[i];
+      String price = "RM" + String.format("%.2f", item.itemsPrice[i]);
+
+      totalPrice += item.itemsPrice[i] * item.itemsCount[i];
+
+      int spacing = columnWidth - id.length() - leftLine.length() - price.length();
+
+      sale += ac.CursorTo(x, y)
+        + id
+        + leftLine
+        + ac.MoveCursor(spacing, 0)
+        + price;
+    }
+
+    String formattedTotalPrice = "RM" + String.format("%.2f", totalPrice);
+    String formattedTotalPriceAfterSst = "RM" + String.format("%.2f", totalPrice * 1.06);
+    sale += ac.MoveCursor(-formattedTotalPrice.length() - 7, 2) + "Total: "+ formattedTotalPrice
+      + ac.MoveCursor(-formattedTotalPrice.length() - 17, 1) + "Total after sst: "+ formattedTotalPriceAfterSst;
+
+    return sale;
   }
 }

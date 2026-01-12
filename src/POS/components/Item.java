@@ -26,9 +26,9 @@ public class Item
   private int indexHotBeverage = indexColdBeverage + catalogue.beverage.length;
   private int itemArrayLength = indexHotBeverage + catalogue.beverage.length;
 
-  private String[] itemsName = new String[itemArrayLength];
-  private int[] itemsCount = new int[itemArrayLength];
-  private double[] itemsPrice = new double[itemArrayLength];
+  public String[] itemsName = new String[itemArrayLength];
+  public int[] itemsCount = new int[itemArrayLength];
+  public double[] itemsPrice = new double[itemArrayLength];
 
   private String[] itemListDisplay = new String[itemArrayLength];
   private double[] itemListPrice = new double[itemArrayLength];
