@@ -18,17 +18,17 @@ public class AsciiCode
   public final String bold = "\u001B[1m";
   public final String resetBold = "\u001B[22m";
 
-  public String CursorTo(int x, int y)
-  {
-    return escapeCode + y + ";" + x + "H";
-  }
-
-  public String CursorToColumn(int x)
+  public String cursorToColumn(int x)
   {
     return escapeCode + x + "G";
   }
 
-  public String MoveCursor(int x, int y)
+  public String cursorTo(int x, int y)
+  {
+    return escapeCode + y + ";" + x + "H";
+  }
+
+  public String moveCursor(int x, int y)
   {
     String move = "";
     if (x > 0)
@@ -52,7 +52,7 @@ public class AsciiCode
     return move;
   }
 
-  public String RgbColor(boolean background, int r, int g, int b)
+  public String rgbColor(boolean background, int r, int g, int b)
   {
     String rgb = r + ";" + g + ";" + b + "m";
     if (background) 
@@ -65,7 +65,7 @@ public class AsciiCode
     }
   }
 
-  public String ResetColor(boolean backgroundColor, boolean foregroundColor)
+  public String resetColor(boolean backgroundColor, boolean foregroundColor)
   {
     if (backgroundColor && foregroundColor)
     {

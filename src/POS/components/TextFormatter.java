@@ -7,7 +7,7 @@ public class TextFormatter
   private int textHeight;
   private int textWidth;
 
-  public String[] WrapText(int width, int height, String text)
+  public String[] wrapText(int width, int height, String text)
   {
     String[] textList = new String[height];
     char character;
@@ -89,13 +89,13 @@ public class TextFormatter
     return newTextList;
   }
 
-  public String AlignCenter(int width, int height, String[] textList)
+  public String alignCenter(int width, int height, String[] textList)
   {
     String line;
     String alignedLine = "";
     int textLength = textList[0].length();
     int padding = ((width - textLength) / 2);
-    String lineStart = ac.MoveCursor(padding, 0);
+    String lineStart = ac.moveCursor(padding, 0);
     alignedLine = lineStart + textList[0];
     int startNextLength = textLength + padding;
     int i;
@@ -109,14 +109,14 @@ public class TextFormatter
 
       padding = ((width - textLength) / 2);
 
-      alignedLine+= ac.MoveCursor(-(startNextLength) + padding, 1) + line;
+      alignedLine+= ac.moveCursor(-(startNextLength) + padding, 1) + line;
       startNextLength = textLength + padding;
     }
     textHeight = i;
     return alignedLine;
   }
 
-  public String AlignLeft(String[] textList)
+  public String alignLeft(String[] textList)
   {
     String line;
     String alignedLine = "";
@@ -129,13 +129,13 @@ public class TextFormatter
       textWidth = Math.max(textWidth, textLength);
       alignedLine+= line;
       if (i == textList.length - 1) return alignedLine;
-      alignedLine+= ac.MoveCursor(-(textLength), 1);
+      alignedLine+= ac.moveCursor(-(textLength), 1);
     }
     textHeight = i;
     return alignedLine;
   }
 
-  public String AlignRight(String[] textList)
+  public String alignRight(String[] textList)
   {
     String line = textList[0];
     String alignedLine = line;
@@ -149,7 +149,7 @@ public class TextFormatter
       if (line == null) break;
       textLength = line.length();
       textWidth = Math.max(textWidth, textLength);
-      String startLineAt = ac.MoveCursor(-(line.length()), 1);
+      String startLineAt = ac.moveCursor(-(line.length()), 1);
       alignedLine+= startLineAt + line;
     }
     textHeight = i;
@@ -157,14 +157,14 @@ public class TextFormatter
   }
 
 
-  public int GetTextHeight()
+  public int getTextHeight()
   {
     int returnHeight = textHeight;
     textHeight = 0;
     return returnHeight;
   }
 
-  public int GetTextWidth()
+  public int getTextWidth()
   {
     int returnWidth = textWidth;
     textWidth = 0;

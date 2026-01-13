@@ -7,6 +7,7 @@ public class POS
     int backgroundWidth = 140;
     int backgroundHeight = 30;
     Item item = new Item();
+    AsciiCode ascii = new AsciiCode();
     Draw draw = new Draw(backgroundWidth, backgroundHeight, item);
     FrameCache fc = new FrameCache(backgroundWidth, backgroundHeight, draw);
     Scanner scanner = new Scanner(System.in);
@@ -38,8 +39,8 @@ public class POS
 out:
     while(true)
     {
-      if (state != 0 && state != 2) System.out.print(draw.DisplayItem());
-      System.out.print(draw.inputBox);
+      if (state != 0 && state != 2) System.out.print(draw.displayItem(draw.orderPanel));
+      System.out.print(draw.inputPanel.panel);
       String charInput = scanner.nextLine();
 
       if (payment)
@@ -72,7 +73,7 @@ out:
           {
             card = true;
           }
-          System.out.print(draw.RenderPayment(amountEntered, card, cash));
+          System.out.print(draw.renderPayment(draw.paymentPanel, amountEntered, card, cash));
           continue;
         }
 
@@ -96,7 +97,7 @@ out:
           amountEntered = Double.parseDouble(charInput);
         }
 
-        System.out.print(draw.RenderPayment(amountEntered, card, cash));
+        System.out.print(draw.renderPayment(draw.paymentPanel, amountEntered, card, cash));
         continue;
       }
 
@@ -110,21 +111,21 @@ out:
           System.out.print(fc.frame[frameState[state] + input]);
           continue;
         }
-        else if (state == 3 && (input >= 0 && input <= item.GetFood().length))
+        else if (state == 3 && (input >= 0 && input <= item.getFood().length))
         {
           System.out.print(fc.frame[fc.indexFood + input]);
           selectFood = true;
           selectedItem = input;
           continue;
         }
-        else if (state == 4 && (input >= 0 && input <= item.GetBeverage().length))
+        else if (state == 4 && (input >= 0 && input <= item.getBeverage().length))
         {
           System.out.print(fc.frame[frameState[state] + input]);
           nextState = state + 1;
           selectedItem = input; 
           continue;
         }
-        else if (state == 5 && (input >= 0 && input <= item.GetAddons().length))
+        else if (state == 5 && (input >= 0 && input <= item.getAddons().length))
         {
           System.out.print(fc.frame[frameState[state] + input]);
           selectedAddons = input;
@@ -143,7 +144,7 @@ out:
             parentState[6] = state;
             state = 6;
             System.out.print(fc.frame[frameState[state]]);
-            System.out.print(draw.RenderPayment(amountEntered, false, false));
+            System.out.print(draw.renderPayment(draw.paymentPanel, amountEntered, false, false));
             payment = true;
             continue;
           case "v":
@@ -159,7 +160,7 @@ out:
               state = nextState;
               System.out.print(fc.frame[frameState[state]]);
               nextState = 0;
-              if (state == 2) System.out.print(draw.RenderSale());
+              if (state == 2) System.out.print(draw.RenderSale(draw.startPanel));
               continue;
             }
             System.out.print(fc.frame[frameState[state]]);
@@ -179,10 +180,10 @@ out:
             selectedAddons = 0;
 
             continue;
-          default: System.out.print(draw.inputBox);
+          default: System.out.print(draw.inputPanel.panel);
         } 
     }
     scanner.close();
-    System.out.print("\u001B[34;1H");
+    System.out.print(ascii.eraseEntireScreen);
   }
 }

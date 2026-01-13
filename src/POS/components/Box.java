@@ -2,7 +2,7 @@ package components;
 
 public class Box
 {
-  AsciiCode ac = new AsciiCode();
+   AsciiCode ascii = new AsciiCode();
 
   private int backgroundWidth;
 
@@ -10,35 +10,35 @@ public class Box
     this.backgroundWidth = width;
   }
 
-  public String DrawBox(int width, int height, int borderType, String borderColor, String fillColor, String backgroundColor)
+  public String drawBox(int width, int height, int borderType, String borderColor, String fillColor, String backgroundColor)
   {
     String middlePart;
     String boxConstruct;
     String horizonLine = "";
     String fill = "";
-    String backgroundBorderReset = ac.MoveCursor(0, 1) + ac.ResetColor(true, true);
-    String backgroundBorder = ac.CursorToColumn(backgroundWidth) + ac.ResetColor(true, true) + backgroundBorderReset;
-    String moveBelow = ac.MoveCursor(-width, 1);
+    String backgroundBorderReset = ascii.moveCursor(0, 1) + ascii.resetColor(true, true);
+    String backgroundBorder = ascii.cursorToColumn(backgroundWidth) + ascii.resetColor(true, true) + backgroundBorderReset;
+    String moveBelow = ascii.moveCursor(-width, 1);
 
 
     for (int i = 0; i < width - 2; i++)
     {
-      horizonLine+=ac.boxBorderHorizon[borderType];
+      horizonLine+= ascii.boxBorderHorizon[borderType];
       fill+=" ";
     }
 
     middlePart = moveBelow 
       + fillColor + borderColor
-      + ac.boxBorderVertical[borderType]
+      + ascii.boxBorderVertical[borderType]
       + fill
-      + ac.boxBorderVertical[borderType] 
+      + ascii.boxBorderVertical[borderType] 
       + backgroundColor;
 
-    boxConstruct = ac.saveCursor
+    boxConstruct = ascii.saveCursor
       + fillColor + borderColor
-      + ac.boxBorderTopLeftCorner[borderType] 
+      + ascii.boxBorderTopLeftCorner[borderType] 
       + horizonLine
-      + ac.boxBorderTopRightCorner[borderType]
+      + ascii.boxBorderTopRightCorner[borderType]
       + backgroundColor;
 
     for (int i = 0; i < height - 2; i++)
@@ -49,13 +49,14 @@ public class Box
 
     boxConstruct+= moveBelow
       + fillColor + borderColor
-      + ac.boxBorderBottomLeftCorner[borderType] 
+      + ascii.boxBorderBottomLeftCorner[borderType] 
       + horizonLine
-      + ac.boxBorderBottomRightCorner[borderType] 
+      + ascii.boxBorderBottomRightCorner[borderType] 
       + backgroundColor
       + backgroundBorder
-      + ac.loadCursor;
+      + ascii.loadCursor;
 
     return boxConstruct;
   }
 }
+
