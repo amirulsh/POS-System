@@ -141,9 +141,9 @@ out:
         input = Integer.parseInt(charInput); // parse string into int
 
         // Start / Order navigation
-        if ((state == 0 || state == 1) && (input >= 0 || input <= 2)) // state is either start or order and input 1 and 2
+        if ((state == 0 || state == 1) && (input >= 0 && input <= 2)) // state is either start or order and input 1 and 2
         {
-          nextState = input; // set next state as 1 for order and 2 for sale
+          nextState = state * 2 + input; // set next state as 1 for order and 2 for sale
           System.out.print(fc.frame[frameState[state] + input]); // switch focus of option to input
 
           continue;

@@ -2,7 +2,7 @@ package components;
 
 public class Box
 {
-   AsciiCode ascii = new AsciiCode();
+  AsciiCode ascii = new AsciiCode();
 
   private int backgroundWidth;
 
