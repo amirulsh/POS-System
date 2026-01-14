@@ -167,7 +167,7 @@ out:
         // Add-ons selection
         else if (state == 5 && (input >= 0 && input <= item.getAddons().length)) // state addon
         {
-          System.out.print(fc.frame[frameState[state] + input]);
+          System.out.print(fc.frame[frameState[state] + input]); // change option focus
           selectedAddons = input;
         }
       }
