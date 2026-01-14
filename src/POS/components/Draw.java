@@ -202,7 +202,7 @@ public class Draw
 
   public String renderPayment(Panel panel, double input, boolean card, boolean cash)
   {
-    String output = panel.panel + ascii.cursorTo(panel.x + 1, panel.y + 1) 
+    String output =  panel.panel + ascii.cursorTo(panel.x + 1, panel.y + 1) 
       + "Total Price: RM" + String.format("%.2f", item.orderTotalPrice * 1.06);
     if (input > 0)
     {

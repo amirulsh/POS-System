@@ -40,6 +40,7 @@ out:
     while(true)
     {
       if (state != 0 && state != 2) System.out.print(draw.displayItem(draw.orderPanel));
+      if (state == 2) System.out.print(draw.renderSale(draw.salePanel));
       System.out.print(draw.inputPanel.panel);
       String charInput = scanner.nextLine();
 

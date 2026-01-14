@@ -85,7 +85,7 @@ public class FrameCache
     expandFocus(option.createOptions(draw.menuPanel, addons), draw.orderBackground);
     frame[indexAddons] += draw.guidePanel.panel + generalBind + voidBind + selectBind;
     indexPayment = nextFrame;
-    frame[++nextFrame] = draw.guidePanel.panel + draw.menuPanel.panel + draw.paymentPanel.panel + generalBind + paymentBind;
+    frame[nextFrame++] = draw.guidePanel.panel + draw.menuPanel.panel + draw.paymentPanel.panel + generalBind + paymentBind;
     indexSale = nextFrame;
     frame[nextFrame++] =  draw.startBackground + draw.salePanel.panel + generalBind;
 
