@@ -181,16 +181,18 @@ public class Draw
     // Build two-line entries per item
     for (int i = 0; i < itemList.length; i++)
     {
-      int ii = i * 2;  // secondLine
+      int ii = i * 2;  // actual line to display
       double price = priceList[i];
       int count = itemCount[i];
 
       // Stop rendering if exceeding panel height
       if (ii > panel.height - 7) continue;
 
+      // first line, name and price
       itemLine[ii] = itemList[i];
-      priceLine[ii]     = "RM" + String.format("%.2f", price) + "       ";
+      priceLine[ii] = "RM" + String.format("%.2f", price) + "       ";
 
+      // second line, count and total price
       itemLine[ii + 1] = " x " + count;
       priceLine[ii + 1] = "RM" + String.format("%.2f", price * count);
     }
@@ -206,24 +208,16 @@ public class Draw
     String formattedSst = String.format("%.2f", sstPrice);
     String formattedFinal = String.format("%.2f", totalAfterSst);
 
-    // Align item names left and prices right
-    String priceDisplay = formatter.alignRight(priceLine);
-    int priceWidth = priceLine[0].length();
-
     // Combine everything into one render string
-    String itemDisplay =
-      ascii.cursorTo(panel.x + 1, panel.y + 1)
-      + panel.fillColor
-      + panel.borderColor
-      + formatter.alignLeft(itemLine)
-      + ascii.cursorTo(panel.x + panel.width - 2 - priceWidth, panel.y + 1)
-      + priceDisplay
-      + ascii.cursorTo(totalPriceDisplayX - 7 - formattedTotal.length(), totalPriceDisplayY)
-      + "Total: " + formattedTotal
-      + ascii.moveCursor(-(5 + formattedSst.length()), 1)
-      + "sst: " + formattedSst
-      + ascii.moveCursor(-(12 + formattedFinal.length()), 1)
-      + "Full Price: " + formattedFinal;
+    String itemDisplay = ascii.cursorTo(panel.x + 1, panel.y + 1)
+      + panel.fillColor + panel.borderColor // change colors
+      + formatter.alignLeft(itemLine)  // display name and count
+      + ascii.cursorTo(panel.x + panel.width - 2 - priceLine[0].length(), panel.y + 1)
+      + formatter.alignRight(priceLine) // display price and total for each
+      + ascii.cursorTo(totalPriceDisplayX - 9 - formattedTotal.length(), totalPriceDisplayY)
+      + formatter.alignRight(new String[]{"Total: RM" + formattedTotal,
+                                          "sst: RM" + formattedSst,
+                                          "Full Price: RM" + formattedFinal});
 
     return itemDisplay;
   }
@@ -231,35 +225,31 @@ public class Draw
   // Renders payment UI depending on cash/card state and input amount
   public String renderPayment(Panel panel, double input, boolean card, boolean cash)
   {
-    String output =
-      panel.panel
+    double price = item.orderTotalPrice * 1.06; // calculate price after sst
+    String output = panel.panel // render payment panel
       + ascii.cursorTo(panel.x + 1, panel.y + 1)
-      + "Total Price: RM"
-      + String.format("%.2f", item.orderTotalPrice * 1.06);
+      + "Total Price: RM" + String.format("%.2f", price);
 
     if (input > 0)
     {
-      double balance = input - item.orderTotalPrice * 1.06;
+      double balance = input - price; // balance
 
-      output +=
-        ascii.cursorTo(panel.x + 1, panel.y + 2)
-        + "Entered: RM" + String.format("%.2f", input)
+      output += ascii.cursorTo(panel.x + 1, panel.y + 2)
+        + "Entered: RM" + String.format("%.2f", input) // display input amount
         + ascii.cursorTo(panel.x + 1, panel.y + 3)
-        + "Balance: RM" + String.format("%.2f", balance)
+        + "Balance: RM" + String.format("%.2f", balance) // display balance
         + ascii.cursorTo(panel.x + 1, panel.y + 5)
         + "Proceed? Y/N";
     }
-    else if (cash)
+    else if (cash) // no input but cash true show prompt enter cash
     {
-      output +=
-        ascii.cursorTo(panel.x + 1, panel.y + 5)
+      output += ascii.cursorTo(panel.x + 1, panel.y + 5)
         + "Enter cash amount.";
     }
 
-    if (card)
+    if (card) // direct proceed
     {
-      output +=
-        ascii.cursorTo(panel.x + 1, panel.y + 5)
+      output += ascii.cursorTo(panel.x + 1, panel.y + 5)
         + "Proceed? Y/N";
     }
 
@@ -268,7 +258,7 @@ public class Draw
   }
 
   // Displays sale history in multi-column layout
-  public String renderSale(Panel panel)
+  public String renderSale(Panel panel) // panel is salePanel
   {
     String sale = panel.fillColor + panel.borderColor;
     int columnWidth = 40;
@@ -276,33 +266,34 @@ public class Draw
     for (int i = 0; i < item.itemsName.length; i++)
     {
       int column = i / (panel.height - 2);
-      int row    = i % (panel.height - 2);
+      int row = i % (panel.height - 2);
 
       int x = panel.x + 1 + (column * (columnWidth + 1));
       int y = panel.y + 1 + row;
 
-      String id    = (i + 1) + ". ";
-      String left  = item.itemsName[i] + " x " + item.itemsCount[i];
-      String price = "RM" + String.format("%.2f", item.itemsPrice[i]);
+      String id = (i + 1) + ". "; // e.g: 1. 2.
+      String left = item.itemsName[i] + " x " + item.itemsCount[i]; // name
+      String price = "RM" + String.format("%.2f", item.itemsPrice[i]); // price
 
-      int spacing = columnWidth - id.length() - left.length() - price.length();
+      int spacing = columnWidth - id.length() - left.length() - price.length(); // distance between name and price
 
-      sale +=
-        ascii.cursorTo(x, y)
+      // combine together
+      sale += ascii.cursorTo(x, y)
         + id
         + left
         + ascii.moveCursor(spacing, 0)
         + price;
     }
 
-    String total  = "RM" + String.format("%.2f", item.saleTotalPrice);
-    String totalS = "RM" + String.format("%.2f", item.saleTotalPrice * 1.06);
+    // format total
+    String total = "RM" + String.format("%.2f", item.saleTotalPrice); 
+    String totalWithSst = "RM" + String.format("%.2f", item.saleTotalPrice * 1.06);
 
-    sale +=
-      ascii.moveCursor(-total.length() - 7, 2)
+    // display totals
+    sale += ascii.moveCursor(-total.length() - 7, 2)
       + "Total: " + total
       + ascii.moveCursor(-total.length() - 17, 1)
-      + "Total after sst: " + totalS;
+      + "Total after sst: " + totalWithSst;
 
     return sale;
   }
