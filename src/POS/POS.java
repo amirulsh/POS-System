@@ -79,7 +79,7 @@ out:
 
         if (charInput.equals("Y"))
         {
-          item.Paid();
+          item.paid();
           item.voidItem();
 
           state = parentState[state];
@@ -160,21 +160,21 @@ out:
               state = nextState;
               System.out.print(fc.frame[frameState[state]]);
               nextState = 0;
-              if (state == 2) System.out.print(draw.RenderSale(draw.startPanel));
+              if (state == 2) System.out.print(draw.renderSale(draw.salePanel));
               continue;
             }
             System.out.print(fc.frame[frameState[state]]);
             if (selectFood && selectedItem != 0)
             {
-              item.RegisterItem(1, selectedItem - 1);
+              item.registerItem(1, selectedItem - 1);
             } 
             else if (!selectFood && selectedItem != 0 && selectedAddons == 1)
             {
-              item.RegisterItem(2, selectedItem - 1);
+              item.registerItem(2, selectedItem - 1);
             } 
             else if (!selectFood && selectedItem != 0 && selectedAddons == 2)
             {
-              item.RegisterItem(3, selectedItem - 1);
+              item.registerItem(3, selectedItem - 1);
             }
             selectFood = false;
             selectedAddons = 0;

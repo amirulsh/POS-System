@@ -23,8 +23,8 @@ public class Item
   private int[] itemListId = new int[itemArrayLength];
   private int[] itemListCount = new int[itemArrayLength];
 
-  public double allItemTotalPrice = 0;
-  public double allListTotalPrice = 0;
+  public double orderTotalPrice = 0;
+  public double saleTotalPrice = 0;
 
   public int lastIndex = 0;
 
@@ -78,7 +78,7 @@ public class Item
   }
 
 
-  public void RegisterItem(int categoryId, int input)
+  public void registerItem(int categoryId, int input)
   {
     int index = 0;
     if (categoryId == 1)
@@ -100,7 +100,7 @@ public class Item
       if (itemListId[i] == index) 
       {
         itemListCount[i]++;
-        allListTotalPrice+= itemListPrice[i];
+        orderTotalPrice += itemListPrice[i];
 
         duplicate = true;
         break;
@@ -112,7 +112,7 @@ public class Item
       itemListDisplay[lastIndex] = itemsName[index];
       itemListPrice[lastIndex] = itemsPrice[index];
       itemListCount[lastIndex] = 1;
-      allListTotalPrice+= itemsPrice[index];
+      orderTotalPrice += itemsPrice[index];
       lastIndex++;
     }
   }
@@ -154,17 +154,17 @@ public class Item
     itemListPrice = new double[itemArrayLength];
     itemListId = new int[itemArrayLength];
     itemListCount = new int[itemArrayLength];
-    allListTotalPrice = 0;
+    orderTotalPrice = 0;
     lastIndex = 0;
   }
 
-  public void Paid()
+  public void paid()
   {
     for (int i = 0; i < itemListId.length; i++)
     {
       itemsCount[itemListId[i]]+= itemListCount[i];
     }
-    allItemTotalPrice+= allListTotalPrice;
-    allListTotalPrice = 0;
+    saleTotalPrice += orderTotalPrice;
+    orderTotalPrice = 0;
   }
 }

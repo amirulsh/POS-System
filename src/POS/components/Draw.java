@@ -17,6 +17,7 @@ public class Draw
   public final Panel guidePanelStart;
   public final Panel inputPanel;
   public final Panel paymentPanel;
+  public final Panel salePanel;
 
   public String startBackground;
   public String orderBackground;
@@ -47,6 +48,14 @@ public class Draw
     startPanel.borderColor = ascii.rgbColor(false, 2, 147, 0);
     startPanel.title = "Start";
 
+    salePanel = new Panel(background, box);
+    salePanel.height = height - 8;
+    salePanel.anchorTop = true;
+    salePanel.anchorLeft = true;
+    salePanel.anchorRight = true;
+    salePanel.fillColor = ascii.rgbColor(true, 193, 255, 178);
+    salePanel.borderColor = ascii.rgbColor(false, 2, 147, 0);
+    salePanel.title = "Sale";
 
     menuPanel = new Panel(background, box);
     menuPanel.width = width * 6 / 10 - 2;
@@ -124,6 +133,7 @@ public class Draw
     inputPanel.redraw();
     inputPanel.panel += ascii.cursorTo(inputPanel.x + 1, inputPanel.y + 1);
     paymentPanel.redraw();
+    salePanel.redraw();
 
     startBackground =
       ascii.eraseEntireScreen
@@ -167,9 +177,9 @@ public class Draw
 
     int totalPriceDisplayY = panel.y + panel.height - 5;
     int totalPriceDisplayX = panel.x + panel.width - 1;
-    double sstPrice = item.allListTotalPrice * 0.06;
-    double totalPriceAfterSst = item.allListTotalPrice + sstPrice;
-    String formatedTotalPrice = String.format("%.2f", item.allListTotalPrice);
+    double sstPrice = item.orderTotalPrice * 0.06;
+    double totalPriceAfterSst = item.orderTotalPrice + sstPrice;
+    String formatedTotalPrice = String.format("%.2f", item.orderTotalPrice);
     String formatedSstPrice = String.format("%.2f", sstPrice);
     String formatedPriceAfterSst = String.format("%.2f", totalPriceAfterSst);
 
@@ -193,10 +203,10 @@ public class Draw
   public String renderPayment(Panel panel, double input, boolean card, boolean cash)
   {
     String output = panel.panel + ascii.cursorTo(panel.x + 1, panel.y + 1) 
-      + "Total Price: RM" + String.format("%.2f", item.allListTotalPrice * 1.06);
+      + "Total Price: RM" + String.format("%.2f", item.orderTotalPrice * 1.06);
     if (input > 0)
     {
-      double balance = input - item.allListTotalPrice * 1.06;
+      double balance = input - item.orderTotalPrice * 1.06;
       output+= ascii.cursorTo(panel.x + 1, panel.y + 2) 
         + "Entered: RM" + String.format("%.2f", input)
         + ascii.cursorTo(panel.x + 1, panel.y + 3)
@@ -218,11 +228,11 @@ public class Draw
     return output;
   }
 
-  public String RenderSale(Panel panel)
+  public String renderSale(Panel panel)
   {
     String sale = panel.fillColor + panel.borderColor;
 
-    int columnWidth = 40; // adjust to your box width
+    int columnWidth = 40; 
 
     for (int i = 0; i < item.itemsName.length; i++)
     {
@@ -245,8 +255,8 @@ public class Draw
         + price;
     }
 
-    String formattedTotalPrice = "RM" + String.format("%.2f", item.allItemTotalPrice);
-    String formattedTotalPriceAfterSst = "RM" + String.format("%.2f", item.allItemTotalPrice * 1.06);
+    String formattedTotalPrice = "RM" + String.format("%.2f", item.saleTotalPrice);
+    String formattedTotalPriceAfterSst = "RM" + String.format("%.2f", item.saleTotalPrice * 1.06);
     sale += ascii.moveCursor(-formattedTotalPrice.length() - 7, 2) + "Total: "+ formattedTotalPrice
       + ascii.moveCursor(-formattedTotalPrice.length() - 17, 1) + "Total after sst: "+ formattedTotalPriceAfterSst;
 
