@@ -28,9 +28,9 @@ public class Panel
 
   // Anchor flags control how the panel positions itself
   public boolean anchorCenter = false;
-  public boolean anchorRight  = false;
-  public boolean anchorLeft   = false;
-  public boolean anchorTop    = false;
+  public boolean anchorRight = false;
+  public boolean anchorLeft = false;
+  public boolean anchorTop = false;
   public boolean anchorBottom = false;
 
   // Border style index used by Box

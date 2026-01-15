@@ -102,7 +102,9 @@ public class FrameCache
 
     // Void item keybind
     String voidBind = ascii.cursorTo(draw.keybindsX, draw.inputPanel.y + 2)
-      + black + ascii.bold + "v" + gray + ascii.resetBold + "oid"; // void
+      + black + ascii.bold + "v" + gray + ascii.resetBold + "oid" // void
+      + ascii.moveCursor(5, 0)
+      + black + ascii.bold + "p" + gray + ascii.resetBold + "ay"; // pay
 
     // Numeric selection hint
     String selectBind = ascii.cursorTo(draw.keybindsX, draw.inputPanel.y + 1)

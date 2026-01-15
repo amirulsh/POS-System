@@ -181,10 +181,12 @@ out:
           case "b":  // back
             // render state to parent
             state = parentState[state];
+            selectedItem = 0;
             System.out.print(fc.frame[frameState[state]]);
             break;
 
           case "p":  // payment
+            if (state == 0 || state == 2) continue;
             parentState[6] = state; // set parent state as current state
             state = 6;  // set state to payment
             System.out.print(fc.frame[frameState[state]]);

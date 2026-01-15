@@ -230,10 +230,9 @@ public class Draw
       + ascii.cursorTo(panel.x + 1, panel.y + 1)
       + "Total Price: RM" + String.format("%.2f", price);
 
-    if (input > 0)
+    double balance = input - price; // balance
+    if (input > 0 && input > price)
     {
-      double balance = input - price; // balance
-
       output += ascii.cursorTo(panel.x + 1, panel.y + 2)
         + "Entered: RM" + String.format("%.2f", input) // display input amount
         + ascii.cursorTo(panel.x + 1, panel.y + 3)
@@ -241,11 +240,19 @@ public class Draw
         + ascii.cursorTo(panel.x + 1, panel.y + 5)
         + "Proceed? Y/N";
     }
+    else if (input > 0 && balance < 0)
+    {
+      output += ascii.cursorTo(panel.x + 1, panel.y + 2) 
+        + "Entered: RM" + String.format("%.2f", input) // display input amount
+        + ascii.cursorTo(panel.x + 1, panel.y + 3)
+        + "Insufficient: RM" + String.format("%.2f", -(balance));
+    }
     else if (cash) // no input but cash true show prompt enter cash
     {
       output += ascii.cursorTo(panel.x + 1, panel.y + 5)
         + "Enter cash amount.";
-    }
+    } 
+
 
     if (card) // direct proceed
     {
