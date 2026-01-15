@@ -3,6 +3,8 @@ public class AsciiCode
 {
   // these are ascii unicode of escape sequance to control cursor position, text color, etc
 
+  public AsciiCode() {} //constructor
+
   private final String esc = "\u001B["; // escape
 
   public final String[] boxBorderHorizon = {"\u2500", "\u2501", "\u2550"}; // {"─", "━", "═"}
